@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Achievements - Expense Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .nav-links {
+            margin: 20px 0;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Your Achievements</h1>
+        <p>Level <span th:text="${userStats.currentLevel}">1</span> • <span th:text="${totalPoints}">0</span> Points • <span th:text="${unlockedCount}">0</span>/<span th:text="${totalCount}">0</span> Unlocked</p>
+    </div>
+
+    <div class="nav-links">
+        <a th:href="@{/}">Back to Dashboard</a>
+        <a th:href="@{/gamification/leaderboard}">View Progress</a>
+    </div>
+
+    <div class="achievement-grid">
+        <div th:each="ua : ${allAchievements}" class="achievement-card">
+            <div th:text="${ua.achievement.badgeIcon}">⭐</div>
+            <h3 th:text="${ua.achievement.name}">Achievement Name</h3>
+            <p th:text="${ua.achievement.description}">Achievement description</p>
+
+            <div th:if="${not ua.isUnlocked}">
+                <div style="background: #eee; height: 8px; margin: 10px 0;">
+                    <div th:style="'background: #3498db; height: 100%; width: ' + ${ua.progressPercentage} + '%;'"></div>
+                </div>
+                <small>
+                    Progress: <span th:text="${ua.currentProgress}">0</span>/<span th:text="${ua.achievement.targetValue}">0</span> (<span th:text="${ua.progressPercentage}">0</span>%)
+                </small>
+            </div>
+
+            <div th:if="${ua.isUnlocked}" style="background: #e8f5e8; padding: 10px; margin-top: 10px;">
+                <strong>Unlocked on <span th:text="${#temporals.format(ua.unlockedDate, 'dd MMM yyyy')}">date</span></strong>
+                <br>+<span th:text="${ua.achievement.pointsReward}">0</span> points
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

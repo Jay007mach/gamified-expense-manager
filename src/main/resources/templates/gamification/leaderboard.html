@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Progress - Expense Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .nav-links {
+            margin: 20px 0;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Your Progress</h1>
+        <p>Track your financial fitness journey</p>
+    </div>
+
+    <div class="nav-links">
+        <a th:href="@{/}">Back to Dashboard</a>
+        <a th:href="@{/gamification/achievements}">View Achievements</a>
+    </div>
+
+    <div style="border: 1px solid #ccc; padding: 20px; margin: 20px 0; text-align: center;">
+        <div style="background: #f39c12; color: white; padding: 10px 20px; display: inline-block; margin-bottom: 15px;">
+            Level <span th:text="${userStats.currentLevel}">1</span>
+        </div>
+        <h3>Level Progress</h3>
+        <div style="background: #eee; height: 20px; margin: 15px 0;">
+            <div th:style="'background: #3498db; height: 100%; width: ' + ${levelProgress} + '%;'"></div>
+        </div>
+        <p><span th:text="${userStats.totalPoints}">0</span> / <span th:text="${userStats.currentLevel * 100}">100</span> points</p>
+        <p th:if="${pointsToNextLevel > 0}">
+            <strong><span th:text="${pointsToNextLevel}">0</span> points needed for next level!</strong>
+        </p>
+        <p th:if="${pointsToNextLevel <= 0}">
+            <strong>Maximum level reached! Great job!</strong>
+        </p>
+    </div>
+
+    <div class="stats-grid">
+        <div style="border: 1px solid #ccc; padding: 15px; text-align: center;">
+            <h4>Tracking Streak</h4>
+            <p style="font-size: 1.5em;" th:text="${userStats.consecutiveTrackingDays}">0</p>
+            <small>consecutive days</small>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 15px; text-align: center;">
+            <h4>No-Spend Days</h4>
+            <p style="font-size: 1.5em;" th:text="${userStats.noSpendDaysThisMonth}">0</p>
+            <small>this month</small>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 15px; text-align: center;">
+            <h4>Total Points</h4>
+            <p style="font-size: 1.5em;" th:text="${userStats.totalPoints}">0</p>
+            <small>lifetime points</small>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 15px; text-align: center;">
+            <h4>Achievements</h4>
+            <p style="font-size: 1.5em;" th:text="${userStats.totalAchievementsUnlocked}">0</p>
+            <small>unlocked</small>
+        </div>
+    </div>
+</div>
+</body>
+</html>
